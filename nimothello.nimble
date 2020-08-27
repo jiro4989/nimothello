@@ -1,11 +1,11 @@
 # Package
 
 version       = "0.1.0"
-author        = "<author>"
+author        = "jiro4989"
 description   = "TODO"
 license       = "MIT"
 srcDir        = "src"
-bin           = @["APPNAME"]
+bin           = @["nimothello"]
 binDir        = "bin"
 
 

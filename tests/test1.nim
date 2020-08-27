@@ -1,6 +1,6 @@
 import unittest
 
-include APPNAME
+include nimothello
 
 suite "suite":
   test "test":

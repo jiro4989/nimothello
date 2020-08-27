@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'
 
 env:
-  APP_NAME: 'APPNAME'
+  APP_NAME: 'nimothello'
   NIM_VERSION: 'stable'
   MAINTAINER: 'MAINTAINER'
   RELEASE_FILES: bin LICENSE README.*
