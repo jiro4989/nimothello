@@ -225,3 +225,10 @@ func getPuttableCellPositions(self: Game): seq[CellPosition] =
         result.add pos
   
   deduplicate result
+
+func turnPlayer(self: var Game) =
+  let p = self.currentPlayer
+  self.currentPlayer =
+    case p
+    of p1: p2
+    of p2: p1
