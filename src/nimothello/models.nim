@@ -1,4 +1,4 @@
-import sequtils
+import sequtils, math
 
 type
   Game* = object
@@ -29,6 +29,7 @@ type
     ## セルの状態を表現する。
   CellPosition* = object
     x, y: int
+  RefCellPosition = ref CellPosition
   Player* {.pure.} = enum
     p1, p2
 
@@ -62,7 +63,7 @@ func getPlayer2Score*(self: Game): int =
   ## プレイヤー2の得点を返す。
   self.board.countScore(player2)
 
-func player2Cell(p: Player): Cell =
+func playerToCell(p: Player): Cell =
   case p
   of p1: player1
   of p2: player2
@@ -99,20 +100,69 @@ func setLine(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
 func putCell*(self: Game, x, y: int): int = 
   discard
 
+func getPuttableObliqueLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
+  ## 斜め方向にコマを配置する。
+  var
+    x1 = x1
+    x2 = x2
+    y1 = y1
+    y2 = y2
+
+  if x2 < x1: swap(x1, x2)
+  if y2 < y1: swap(y1, y2)
+  for x2 in x1..x2:
+    for y2 in y1..y2:
+      if x2 != y2:
+        continue
+      # 自分のセルか壁が見つかったら早期リターン
+      if self[x2, y2] in [cell, wall]:
+        return
+      # 空のセルが見つかったら返す。
+      # ただし元セルに隣接する場合はNG
+      if self[x2, y2] in [cell, wall]:
+        if abs(x1 - x2) == 1:
+          return nil
+        return RefCellPosition(x: x2, y: y2)
+      # それ以外のときは相手のセルなのでスルー
+
+func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
+  var
+    x = x
+    y = y
+
+  while true:
+    if x < 0 or self[0].len <= x:
+      return RefCellPosition(x: x, y: y)
+
+    x += xp
+    y += yp
+
 func getPuttableCellPositions(self: Board, x, y: int, cell: Cell): seq[CellPosition] =
+  template checkAddOblique(pos: RefCellPosition) =
+    if not pos.isNil:
+      let got = self.getPuttableObliqueLinePosition(pos.x, pos.y, x, y, cell)
+      if not got.isNil:
+        result.add got[]
+
   # 1. 左上
+  checkAddOblique self.getFarestPosition(x, y, -1, -1)
+
   # 2. 上
   # 3. 右上
+  checkAddOblique self.getFarestPosition(x, y, 1, -1)
+
   # 4. 左
   # 5. 右
   # 6. 左下
+  checkAddOblique self.getFarestPosition(x, y, -1, 1)
+
   # 7. 下
   # 8. 右下
-  discard
+  checkAddOblique self.getFarestPosition(x, y, 1, 1)
 
 func getPuttableCellPositions(self: Game): seq[CellPosition] =
   let
-    playerCell = self.currentPlayer.player2Cell
+    playerCell = self.currentPlayer.playerToCell
     board = self.board
 
   for y, row in board:
