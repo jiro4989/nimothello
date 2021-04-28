@@ -119,11 +119,55 @@ func getPuttableObliqueLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell
         return
       # 空のセルが見つかったら返す。
       # ただし元セルに隣接する場合はNG
-      if self[x2, y2] in [cell, wall]:
+      if self[x2, y2] == empty:
         if abs(x1 - x2) == 1:
           return nil
         return RefCellPosition(x: x2, y: y2)
       # それ以外のときは相手のセルなのでスルー
+
+func getPuttableHotizontalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
+  ## 水平方向にコマを配置する。
+  var
+    x1 = x1
+    x2 = x2
+    y1 = y1
+    y2 = y2
+
+  if x2 < x1: swap(x1, x2)
+  if y2 < y1: swap(y1, y2)
+  for x2 in x1..x2:
+    # 自分のセルか壁が見つかったら早期リターン
+    if self[x2, y2] in [cell, wall]:
+      return
+    # 空のセルが見つかったら返す。
+    # ただし元セルに隣接する場合はNG
+    if self[x2, y2] == empty:
+      if abs(x1 - x2) == 1:
+        return nil
+      return RefCellPosition(x: x2, y: y2)
+    # それ以外のときは相手のセルなのでスルー
+
+func getPuttableVerticalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
+  ## 垂直方向にコマを配置する。
+  var
+    x1 = x1
+    x2 = x2
+    y1 = y1
+    y2 = y2
+
+  if x2 < x1: swap(x1, x2)
+  if y2 < y1: swap(y1, y2)
+  for y2 in y1..y2:
+    # 自分のセルか壁が見つかったら早期リターン
+    if self[x2, y2] in [cell, wall]:
+      return
+    # 空のセルが見つかったら返す。
+    # ただし元セルに隣接する場合はNG
+    if self[x2, y2] == empty:
+      if abs(y1 - y2) == 1:
+        return nil
+      return RefCellPosition(x: x2, y: y2)
+    # それ以外のときは相手のセルなのでスルー
 
 func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
   var
@@ -138,27 +182,35 @@ func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
     y += yp
 
 func getPuttableCellPositions(self: Board, x, y: int, cell: Cell): seq[CellPosition] =
-  template checkAddOblique(pos: RefCellPosition) =
+  template checkAdd(pos: RefCellPosition, fn: proc(self: Board, x, y, xp, yp: int, cell: Cell): RefCellPosition) =
     if not pos.isNil:
-      let got = self.getPuttableObliqueLinePosition(pos.x, pos.y, x, y, cell)
+      let got = self.fn(pos.x, pos.y, x, y, cell)
       if not got.isNil:
         result.add got[]
 
   # 1. 左上
-  checkAddOblique self.getFarestPosition(x, y, -1, -1)
+  checkAdd(self.getFarestPosition(x, y, -1, -1), getPuttableObliqueLinePosition)
 
   # 2. 上
+  checkAdd(self.getFarestPosition(x, y, 0, -1), getPuttableVerticalLinePosition)
+
   # 3. 右上
-  checkAddOblique self.getFarestPosition(x, y, 1, -1)
+  checkAdd(self.getFarestPosition(x, y, 1, -1), getPuttableObliqueLinePosition)
 
   # 4. 左
+  checkAdd(self.getFarestPosition(x, y, -1, 0), getPuttableHotizontalLinePosition)
+
   # 5. 右
+  checkAdd(self.getFarestPosition(x, y, 1, 0), getPuttableHotizontalLinePosition)
+
   # 6. 左下
-  checkAddOblique self.getFarestPosition(x, y, -1, 1)
+  checkAdd(self.getFarestPosition(x, y, -1, 1), getPuttableObliqueLinePosition)
 
   # 7. 下
+  checkAdd(self.getFarestPosition(x, y, 0, 1), getPuttableVerticalLinePosition)
+
   # 8. 右下
-  checkAddOblique self.getFarestPosition(x, y, 1, 1)
+  checkAdd(self.getFarestPosition(x, y, 1, 1), getPuttableObliqueLinePosition)
 
 func getPuttableCellPositions(self: Game): seq[CellPosition] =
   let
