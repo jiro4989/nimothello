@@ -35,11 +35,23 @@ type
 
 func newBoard*(): Board =
   ## ゲーム板を生成する。
-  discard
+  result =
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player2, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
 
 func newGame*(): Game =
   ## ゲームインスタンスを生成する。
-  discard
+  result = Game(board: newBoard(), currentPlayer: p1)
 
 func `[]`*(self: Board, x, y: int): Cell =
   ## x, y座標のセルを返す。
