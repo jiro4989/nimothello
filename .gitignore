@@ -1,2 +1,5 @@
 /bin/
 tests/test1
+nimcache
+tests/test_gameplay
+testresults/pattern.json

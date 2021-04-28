@@ -32,6 +32,8 @@ type
   RefCellPosition = ref CellPosition
   Player* {.pure.} = enum
     p1, p2
+  GameStatus* {.pure.} = enum
+    isRunning, isFinished
 
 func newBoard*(): Board =
   ## ゲーム板を生成する。
@@ -52,6 +54,25 @@ func newBoard*(): Board =
 func newGame*(): Game =
   ## ゲームインスタンスを生成する。
   result = Game(board: newBoard(), currentPlayer: p1)
+
+func getStatus*(self: Game): GameStatus =
+  var emptyCount: int
+  for row in self.board:
+    for cell in row:
+      if cell == empty:
+        inc emptyCount
+
+  result =
+    if 0 < emptyCount:
+      isRunning
+    else:
+      isFinished
+
+func isRunning*(self: Game): bool =
+  self.getStatus == GameStatus.isRunning
+
+func isFinished*(self: Game): bool =
+  self.getStatus == GameStatus.isFinished
 
 func `[]`*(self: Board, x, y: int): Cell =
   ## x, y座標のセルを返す。
@@ -99,8 +120,16 @@ func setLineOblique(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
           self[x, y1] = cell
           break yBlock
 
-func setLine(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
+func setLine*(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 直線上のセルを反転する。
+  var
+    x1 = x1
+    x2 = x2
+    y1 = y1
+    y2 = y2
+
+  if x2 < x1: swap(x1, x2)
+  if y2 < y1: swap(y1, y2)
   if y1 == y2:
     self.setLineHorizontal x1, y1, x2, y2, cell
     return
@@ -109,8 +138,12 @@ func setLine(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
     return
   self.setLineOblique x1, y1, x2, y2, cell
 
-func putCell*(self: Game, x, y: int): int = 
-  discard
+func turnPlayer(self: var Game) =
+  let p = self.currentPlayer
+  self.currentPlayer =
+    case p
+    of p1: p2
+    of p2: p1
 
 func getPuttableObliqueLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
   ## 斜め方向にコマを配置する。
@@ -187,7 +220,7 @@ func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
     y = y
 
   while true:
-    if x < 0 or self[0].len <= x:
+    if x < 0 or self[0].len <= x or y < 0 or self.len <= y:
       return RefCellPosition(x: x, y: y)
 
     x += xp
@@ -238,9 +271,12 @@ func getPuttableCellPositions(self: Game): seq[CellPosition] =
   
   deduplicate result
 
-func turnPlayer(self: var Game) =
-  let p = self.currentPlayer
-  self.currentPlayer =
-    case p
-    of p1: p2
-    of p2: p1
+func putCell*(self: var Game, x, y: int) = 
+  ## 現在のプレイヤーに対応するセルを指定の座標のセルにセットする。
+  ## セットの結果反転される箇所があれば反転される。
+  let cell = self.currentPlayer.playerToCell
+  let poses = self.board.getPuttableCellPositions(x, y, cell)
+  for pos in poses:
+    self.board.setLine x, y, pos.x, pos.y, cell
+  self.board[x, y] = cell
+  self.turnPlayer()
