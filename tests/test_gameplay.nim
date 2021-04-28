@@ -8,6 +8,8 @@ import nimothello/models
 
 var game = newGame()
 game.putCell(6, 4)
+check game.getBoard()[6, 4] == player1
+debugPrint game.getBoard()
 check game.getPlayer1Score() == 4
 check game.getPlayer2Score() == 1
 game.putCell(6, 3)

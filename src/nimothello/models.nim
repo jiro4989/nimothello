@@ -76,7 +76,7 @@ func isFinished*(self: Game): bool =
 
 func `[]`*(self: Board, x, y: int): Cell =
   ## x, y座標のセルを返す。
-  discard
+  self[y][x]
 
 func `[]=`*(self: var Board, x, y: int, cell: Cell) =
   ## x, y座標のセルを返す。
@@ -172,24 +172,32 @@ func getPuttableObliqueLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell
 
 func getPuttableHotizontalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
   ## 水平方向にコマを配置する。
-  var
-    x1 = x1
-    x2 = x2
-    y1 = y1
-    y2 = y2
-
-  if x2 < x1: swap(x1, x2)
-  if y2 < y1: swap(y1, y2)
-  for x2 in x1..x2:
+  let rng =
+    block:
+      var n: seq[int]
+      if x1 < x2:
+        for x in x1+1..x2:
+          n.add x
+        n
+      else:
+        for x in countdown(x2-1, x1):
+          n.add x
+        n
+  
+  for x in rng:
+    let c = self[x, y2]
+    debugEcho x
+    debugEcho y2
+    debugEcho c
     # 自分のセルか壁が見つかったら早期リターン
-    if self[x2, y2] in [cell, wall]:
+    if c in [cell, wall]:
       return
     # 空のセルが見つかったら返す。
     # ただし元セルに隣接する場合はNG
-    if self[x2, y2] == empty:
-      if abs(x1 - x2) == 1:
+    if c == empty:
+      if abs(x1 - x) == 1:
         return nil
-      return RefCellPosition(x: x2, y: y2)
+      return RefCellPosition(x: x, y: y2)
     # それ以外のときは相手のセルなのでスルー
 
 func getPuttableVerticalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
@@ -220,7 +228,7 @@ func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
     y = y
 
   while true:
-    if x < 0 or self[0].len <= x or y < 0 or self.len <= y:
+    if x <= 0 or self[0].len < x or y <= 0 or self.len < y:
       return RefCellPosition(x: x, y: y)
 
     x += xp
@@ -229,6 +237,7 @@ func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
 func getPuttableCellPositions(self: Board, x, y: int, cell: Cell): seq[CellPosition] =
   template checkAdd(pos: RefCellPosition, fn: proc(self: Board, x, y, xp, yp: int, cell: Cell): RefCellPosition) =
     if not pos.isNil:
+      debugEcho pos[]
       let got = self.fn(pos.x, pos.y, x, y, cell)
       if not got.isNil:
         result.add got[]
@@ -276,7 +285,25 @@ func putCell*(self: var Game, x, y: int) =
   ## セットの結果反転される箇所があれば反転される。
   let cell = self.currentPlayer.playerToCell
   let poses = self.board.getPuttableCellPositions(x, y, cell)
+  debugEcho poses
   for pos in poses:
     self.board.setLine x, y, pos.x, pos.y, cell
   self.board[x, y] = cell
   self.turnPlayer()
+
+func getBoard*(self: Game): Board =
+  self.board
+
+func debugPrint*(self: Board) =
+  for row in self:
+    var line: string
+    for cell in row:
+      let s =
+        case cell
+        of wall: "w"
+        of empty: "-"
+        of player1: "1"
+        of player2: "2"
+      line.add s
+      line.add " "
+    debugEcho line
