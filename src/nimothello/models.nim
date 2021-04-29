@@ -294,6 +294,9 @@ func putCell*(self: var Game, x, y: int) =
   ## セットの結果反転される箇所があれば反転される。
   # ボードのセルを全部網羅し、現在のプレイヤーのセルのときだけ処理をする
   let cell = self.currentPlayer.playerToCell
+  type Pos = object
+    x1, y1, x2, y2: int
+  var puttablePoses: seq[Pos]
   for yy, row in self.board:
     for xx, c in row:
       if c != cell:
@@ -302,8 +305,11 @@ func putCell*(self: var Game, x, y: int) =
       let poses = self.board.getPuttableCellPositions(xx, yy, cell)
       for pos in poses:
         if pos.x == x and pos.y == y:
-          self.board.setLine xx, yy, x, y, cell
+          puttablePoses.add Pos(x1: xx, y1: yy, x2: x, y2: y)
           break
+  puttablePoses = deduplicate(puttablePoses)
+  for pos in puttablePoses:
+    self.board.setLine pos.x1, pos.y1, pos.x2, pos.y2, cell
   self.turnPlayer()
 
 func getBoard*(self: Game): Board =
