@@ -247,8 +247,7 @@ func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
 func getPuttableCellPositions(self: Board, x, y: int, cell: Cell): seq[CellPosition] =
   template checkAdd(pos: RefCellPosition, fn: proc(self: Board, x, y, xp, yp: int, cell: Cell): RefCellPosition) =
     if not pos.isNil:
-      debugEcho pos[]
-      let got = self.fn(pos.x, pos.y, x, y, cell)
+      let got = self.fn(x, y, pos.x, pos.y, cell)
       if not got.isNil:
         result.add got[]
 
