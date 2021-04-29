@@ -115,7 +115,7 @@ func setLineOblique(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 斜め方向にコマを配置する。
   for x in x1..x2:
     block yBlock:
-      for y in y1..<y2:
+      for y in y1..y2:
         if x == y:
           self[x, y1] = cell
           break yBlock
