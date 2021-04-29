@@ -358,3 +358,42 @@ block:
     checkpoint tt.desc
     let got = tt.g.board.getPuttableCellPositions(tt.x, tt.y, tt.cell)
     check tt.wantLen == got.len
+
+block:
+  checkpoint "putCell"
+  let want1 = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player1, player1, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+  let want2 = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+  let tests = [
+    (desc: "ok: put", game: newGame(), x: 6, y: 4, want: want1),
+    (desc: "ok: put", game: newGame(), x: 5, y: 3, want: want2),
+  ]
+  for tt in tests:
+    checkpoint tt.desc
+    var g = tt.game
+    g.putCell(tt.x, tt.y)
+    check tt.want == g.board
+    debugPrint g.board
