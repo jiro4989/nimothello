@@ -225,3 +225,10 @@ block:
     var g = newGame()
     g.board.setLine(tt.x1, tt.y1, tt.x2, tt.y2, tt.cell)
     check tt.want == g.board
+
+block:
+  checkpoint "turnPlayer"
+  var g = newGame()
+  check g.currentPlayer == p1
+  g.turnPlayer()
+  check g.currentPlayer == p2
