@@ -338,3 +338,16 @@ block:
       check got.isNil
       continue
     check tt.want[] == got[]
+
+block:
+  checkpoint "getPuttableCellPositions"
+  var g1 = newGame()
+  g1.board[2, 2] = player2
+  g1.board[4, 2] = player2
+  let tests = [
+    (desc: "ok: [left up] found", g: g1, x: 3, y: 2, wantLen: 2, cell: player1),
+  ]
+  for tt in tests:
+    checkpoint tt.desc
+    let got = tt.g.board.getPuttableCellPositions(tt.x, tt.y, tt.cell)
+    check tt.wantLen == got.len
