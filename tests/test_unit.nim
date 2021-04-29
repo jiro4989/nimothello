@@ -290,3 +290,29 @@ block:
       check got.isNil
       continue
     check tt.want[] == got[]
+
+block:
+  checkpoint "getPuttableVerticalLinePosition"
+  var nilWant: RefCellPosition
+  var g1 = newGame()
+  g1.board[3, 3] = player2
+  g1.board[3, 5] = player2
+  g1.board[3, 6] = player2
+  var g2 = newGame()
+  g2.board[3, 1] = player2
+  let tests = [
+    (desc: "ok: [up] found", game: g1, x1: 3, y1: 4, x2: 3, y2: 2, cell: player1, want: RefCellPosition(x: 3, y: 2), err: false),
+    (desc: "ng: [up] not found when same position", game: newGame(), x1: 3, y1: 4, x2: 3, y2: 4, cell: player1, want: nilWant, err: true),
+    (desc: "ng: [up] not found when distance is 1", game: newGame(), x1: 3, y1: 4, x2: 3, y2: 3, cell: player1, want: nilWant, err: true),
+    (desc: "ng: [up] not found when reached wall", game: g2, x1: 3, y1: 2, x2: 3, y2: 0, cell: player1, want: nilWant, err: true),
+    (desc: "ok: [down] found", game: g1, x1: 3, y1: 4, x2: 3, y2: 7, cell: player1, want: RefCellPosition(x: 3, y: 7), err: false),
+    (desc: "ng: [down] not found when distance is 1", game: newGame(), x1: 3, y1: 4, x2: 3, y2: 5, cell: player1, want: nilWant, err: true),
+  ]
+  for tt in tests:
+    checkpoint tt.desc
+    var g = tt.game
+    let got = g.board.getPuttableVerticalLinePosition(tt.x1, tt.y1, tt.x2, tt.y2, tt.cell)
+    if tt.err:
+      check got.isNil
+      continue
+    check tt.want[] == got[]
