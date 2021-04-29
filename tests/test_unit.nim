@@ -250,6 +250,11 @@ block:
     (desc: "ng: [right down] not found when same position", game: newGame(), x1: 1, y1: 3, x2: 1, y2: 3, cell: player1, want: nilWant, err: true),
     (desc: "ng: [right down] not found when distance is 1", game: newGame(), x1: 1, y1: 3, x2: 2, y2: 4, cell: player1, want: nilWant, err: true),
     (desc: "ng: [right down] not found when distance is 1", game: newGame(), x1: 1, y1: 3, x2: 3, y2: 5, cell: player1, want: nilWant, err: true),
+    (desc: "ok: [left up] found", game: g1, x1: 3, y1: 3, x2: 1, y2: 1, cell: player1, want: RefCellPosition(x: 1, y: 1), err: false),
+    (desc: "ng: [left up] not found when same position", game: newGame(), x1: 3, y1: 3, x2: 3, y2: 3, cell: player1, want: nilWant, err: true),
+    (desc: "ng: [left up] not found when distance is 1", game: newGame(), x1: 3, y1: 3, x2: 2, y2: 2, cell: player1, want: nilWant, err: true),
+    (desc: "ok: [left down] found", game: g1, x1: 3, y1: 3, x2: 1, y2: 5, cell: player1, want: RefCellPosition(x: 1, y: 5), err: false),
+    (desc: "ng: [left down] not found when distance is 1", game: newGame(), x1: 3, y1: 3, x2: 2, y2: 4, cell: player1, want: nilWant, err: true),
   ]
   for tt in tests:
     checkpoint tt.desc
