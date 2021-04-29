@@ -113,12 +113,21 @@ func setLineHorizontal(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
 
 func setLineOblique(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 斜め方向にコマを配置する。
-  for x in x1..x2:
-    block yBlock:
-      for y in y1..y2:
-        if x == y:
-          self[x, y1] = cell
-          break yBlock
+  var xp =
+    if x1 < x2: 1
+    else: -1
+  var yp =
+    if y1 < y2: 1
+    else: -1
+
+  let diff = abs(x1 - x2)
+  var
+    x = x1
+    y = y1
+  for i in 1..diff+1:
+    self[x, y] = cell
+    x += xp
+    y += yp
 
 func setLine*(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 直線上のセルを反転する。
