@@ -345,7 +345,14 @@ block:
   g1.board[2, 2] = player2
   g1.board[4, 2] = player2
   let tests = [
-    (desc: "ok: [left up] found", g: g1, x: 3, y: 2, wantLen: 2, cell: player1),
+    (desc: "ok: [left up, right up] found", g: g1, x: 3, y: 3, wantLen: 2, cell: player1),
+    (desc: "ok: [left, right] found", g: g1, x: 3, y: 2, wantLen: 2, cell: player1),
+    (desc: "ok: [left down, right down] found", g: g1, x: 3, y: 1, wantLen: 2, cell: player1),
+    (desc: "ok: [down] found", g: g1, x: 2, y: 1, wantLen: 1, cell: player1),
+    (desc: "ok: [up] found", g: g1, x: 2, y: 3, wantLen: 1, cell: player1),
+    (desc: "ok: [left] found", g: g1, x: 5, y: 2, wantLen: 1, cell: player1),
+    (desc: "ok: [right] found", g: g1, x: 1, y: 2, wantLen: 1, cell: player1),
+    (desc: "ng: [NONE] not found", g: g1, x: 8, y: 8, wantLen: 0, cell: player1),
   ]
   for tt in tests:
     checkpoint tt.desc
