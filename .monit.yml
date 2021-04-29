@@ -1,0 +1,15 @@
+%YAML 1.2
+%TAG !n! tag:nimyaml.org,2016:
+--- !n!custom:MonitorConfig 
+sleep: 1
+targets: 
+  - 
+    name: Task name
+    paths: [src, tests]
+    commands:
+      - testament r test_unit.nim
+    extensions: [.nim]
+    files: []
+    exclude_extensions: []
+    exclude_files: []
+    once: y
