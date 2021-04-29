@@ -8,25 +8,25 @@ import nimothello/models
 
 var game = newGame()
 let tests = [
-  (x: 6, y: 4, scoreP1: 4, scoreP2: 1, status: GameStatus.isRunning),  # p1
-  (x: 6, y: 3, scoreP1: 3, scoreP2: 3, status: GameStatus.isRunning),  # p2
-  (x: 5, y: 3, scoreP1: 5, scoreP2: 2, status: GameStatus.isRunning),  # p1
-  (x: 4, y: 3, scoreP1: 3, scoreP2: 5, status: GameStatus.isRunning),  # p2
-  (x: 5, y: 2, scoreP1: 5, scoreP2: 4, status: GameStatus.isRunning),  # p1
-  (x: 6, y: 5, scoreP1: 2, scoreP2: 8, status: GameStatus.isRunning),  # p2
-  (x: 5, y: 6, scoreP1: 5, scoreP2: 6, status: GameStatus.isRunning),  # p1
-  (x: 4, y: 6, scoreP1: 4, scoreP2: 8, status: GameStatus.isRunning),  # p2
-  (x: 3, y: 3, scoreP1: 6, scoreP2: 7, status: GameStatus.isRunning),  # p1
-  (x: 2, y: 3, scoreP1: 3, scoreP2: 11, status: GameStatus.isRunning), # p2
-  (x: 7, y: 4, scoreP1: 7, scoreP2: 8, status: GameStatus.isRunning),  # p1
-  (x: 8, y: 4, scoreP1: 4, scoreP2: 12, status: GameStatus.isRunning),  # p2
-  (x: 1, y: 3, scoreP1: 9, scoreP2: 8, status: GameStatus.isRunning),  # p1
-  (x: 5, y: 1, scoreP1: 7, scoreP2: 11, status: GameStatus.isRunning),  # p2
-  (x: 4, y: 7, scoreP1: 11, scoreP2: 8, status: GameStatus.isRunning),  # p1
+  (x: 6, y: 4, scoreP1: 4, scoreP2: 1, status: GameStatus.isRunning),    # p1
+  (x: 6, y: 3, scoreP1: 3, scoreP2: 3, status: GameStatus.isRunning),    # p2
+  (x: 5, y: 3, scoreP1: 5, scoreP2: 2, status: GameStatus.isRunning),    # p1
+  (x: 4, y: 3, scoreP1: 3, scoreP2: 5, status: GameStatus.isRunning),    # p2
+  (x: 5, y: 2, scoreP1: 5, scoreP2: 4, status: GameStatus.isRunning),    # p1
+  (x: 6, y: 5, scoreP1: 2, scoreP2: 8, status: GameStatus.isRunning),    # p2
+  (x: 5, y: 6, scoreP1: 5, scoreP2: 6, status: GameStatus.isRunning),    # p1
+  (x: 4, y: 6, scoreP1: 4, scoreP2: 8, status: GameStatus.isRunning),    # p2
+  (x: 3, y: 3, scoreP1: 6, scoreP2: 7, status: GameStatus.isRunning),    # p1
+  (x: 2, y: 3, scoreP1: 3, scoreP2: 11, status: GameStatus.isRunning),   # p2
+  (x: 7, y: 4, scoreP1: 7, scoreP2: 8, status: GameStatus.isRunning),    # p1
+  (x: 8, y: 4, scoreP1: 4, scoreP2: 12, status: GameStatus.isRunning),   # p2
+  (x: 1, y: 3, scoreP1: 9, scoreP2: 8, status: GameStatus.isRunning),    # p1
+  (x: 5, y: 1, scoreP1: 7, scoreP2: 11, status: GameStatus.isRunning),   # p2
+  (x: 4, y: 7, scoreP1: 11, scoreP2: 8, status: GameStatus.isRunning),   # p1
   (x: 5, y: 7, scoreP1: 10, scoreP2: 10, status: GameStatus.isRunning),  # p2
-  (x: 6, y: 7, scoreP1: 13, scoreP2: 8, status: GameStatus.isRunning),  # p1
+  (x: 6, y: 7, scoreP1: 13, scoreP2: 8, status: GameStatus.isRunning),   # p1
   (x: 5, y: 8, scoreP1: 11, scoreP2: 11, status: GameStatus.isRunning),  # p2
-  (x: 6, y: 6, scoreP1: 14, scoreP2: 9, status: GameStatus.isRunning),  # p1
+  (x: 6, y: 6, scoreP1: 14, scoreP2: 9, status: GameStatus.isRunning),   # p1
   (x: 7, y: 6, scoreP1: 12, scoreP2: 12, status: GameStatus.isRunning),  # p2
   (x: 8, y: 6, scoreP1: 14, scoreP2: 11, status: GameStatus.isRunning),  # p1
   (x: 3, y: 7, scoreP1: 11, scoreP2: 15, status: GameStatus.isRunning),  # p2
@@ -67,7 +67,7 @@ let tests = [
   (x: 4, y: 8, scoreP1: 37, scoreP2: 24, status: GameStatus.isRunning),  # p1
   (x: 7, y: 2, scoreP1: 36, scoreP2: 26, status: GameStatus.isRunning),  # p2
   (x: 8, y: 2, scoreP1: 40, scoreP2: 23, status: GameStatus.isRunning),  # p1
-  (x: 8, y: 1, scoreP1: 39, scoreP2: 25, status: GameStatus.isFinished),  # p2
+  (x: 8, y: 1, scoreP1: 39, scoreP2: 25, status: GameStatus.isFinished), # p2
 ]
 for tt in tests:
   game.putCell(tt.x, tt.y)
