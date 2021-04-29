@@ -146,6 +146,8 @@ block:
   let tests = [
     (desc: "right down", x1: 1, y1: 1, x2: 3, y2: 3, cell: player1, want: want1),
     (desc: "left down", x1: 3, y1: 1, x2: 1, y2: 3, cell: player1, want: want2),
+    (desc: "left up", x1: 3, y1: 3, x2: 1, y2: 1, cell: player1, want: want1),
+    (desc: "right up", x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: want2),
   ]
   for tt in tests:
     checkpoint tt.desc
