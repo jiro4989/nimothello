@@ -154,3 +154,74 @@ block:
     var g = newGame()
     g.board.setLineOblique(tt.x1, tt.y1, tt.x2, tt.y2, tt.cell)
     check tt.want == g.board
+
+block:
+  # set line
+  let wantRightDown = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, player1, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, player1, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, player1, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player2, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+  let wantLeftDown = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, empty, empty, player1, empty, empty, empty, empty, empty, wall],
+      [wall, empty, player1, empty, empty, empty, empty, empty, empty, wall],
+      [wall, player1, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player2, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+  let wantUp = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, player1, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, player1, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, player1, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player2, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+  let wantLeft = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, player1, player1, player1, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player2, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+
+  let tests = [
+    (desc: "left up", x1: 3, y1: 3, x2: 1, y2: 1, cell: player1, want: wantRightDown),
+    (desc: "up", x1: 1, y1: 3, x2: 1, y2: 1, cell: player1, want: wantUp),
+    (desc: "right up", x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: wantLeftDown),
+    (desc: "left", x1: 3, y1: 1, x2: 1, y2: 1, cell: player1, want: wantLeft),
+    (desc: "right", x1: 1, y1: 1, x2: 3, y2: 1, cell: player1, want: wantLeft),
+    (desc: "left down", x1: 3, y1: 1, x2: 1, y2: 3, cell: player1, want: wantLeftDown),
+    (desc: "down", x1: 1, y1: 1, x2: 1, y2: 3, cell: player1, want: wantUp),
+    (desc: "right down", x1: 1, y1: 1, x2: 3, y2: 3, cell: player1, want: wantRightDown),
+  ]
+  for tt in tests:
+    checkpoint tt.desc
+    var g = newGame()
+    g.board.setLine(tt.x1, tt.y1, tt.x2, tt.y2, tt.cell)
+    check tt.want == g.board
