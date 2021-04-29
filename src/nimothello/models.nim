@@ -206,24 +206,25 @@ func getPuttableHotizontalLinePosition(self: Board, x1, y1, x2, y2: int, cell: C
 
 func getPuttableVerticalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
   ## 垂直方向にコマを配置する。
+  if x1 == x2 and y1 == y2: return
+  let yp = inclVal(y1, y2)
+  let diff = abs(y1 - y2)
   var
-    x1 = x1
-    x2 = x2
-    y1 = y1
-    y2 = y2
+    x = x1
+    y = y1
+  for i in 1..diff+1:
+    y += yp
 
-  if x2 < x1: swap(x1, x2)
-  if y2 < y1: swap(y1, y2)
-  for y2 in y1..y2:
+    let c = self[x, y]
     # 自分のセルか壁が見つかったら早期リターン
-    if self[x2, y2] in [cell, wall]:
+    if c in [cell, wall]:
       return
     # 空のセルが見つかったら返す。
     # ただし元セルに隣接する場合はNG
-    if self[x2, y2] == empty:
-      if abs(y1 - y2) == 1:
+    if c == empty:
+      if abs(y1 - y) == 1:
         return nil
-      return RefCellPosition(x: x2, y: y2)
+      return RefCellPosition(x: x, y: y)
     # それ以外のときは相手のセルなのでスルー
 
 func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
