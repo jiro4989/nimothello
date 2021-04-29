@@ -7,7 +7,7 @@ targets:
     name: Task name
     paths: [src, tests]
     commands:
-      - testament r test_unit.nim
+      - testament p "tests/*.nim"
     extensions: [.nim]
     files: []
     exclude_extensions: []
