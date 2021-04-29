@@ -234,14 +234,22 @@ block:
   check g.currentPlayer == p2
 
 block:
+  checkpoint "getPuttableObliqueLinePosition"
   var nilWant: RefCellPosition
   var g1 = newGame()
   g1.board[2, 2] = player2
+  g1.board[2, 4] = player2
   let tests = [
-    (desc: "ok: found", game: g1, x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: RefCellPosition(x: 3, y: 1), err: false),
-    (desc: "ng: not found when same position", game: newGame(), x1: 1, y1: 3, x2: 1, y2: 3, cell: player1, want: nilWant, err: true),
-    (desc: "ng: not found when distance is 1", game: newGame(), x1: 1, y1: 3, x2: 2, y2: 2, cell: player1, want: nilWant, err: true),
-    (desc: "ng: not found when no player2 cell", game: newGame(), x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: nilWant, err: true),
+    (desc: "ok: [right up] found", game: g1, x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: RefCellPosition(x: 3, y: 1), err: false),
+    (desc: "ng: [right up] not found when same position", game: newGame(), x1: 1, y1: 3, x2: 1, y2: 3, cell: player1, want: nilWant, err: true),
+    (desc: "ng: [right up] not found when distance is 1", game: newGame(), x1: 1, y1: 3, x2: 2, y2: 2, cell: player1, want: nilWant, err: true),
+    (desc: "ng: [right up] not found when no player2 cell", game: newGame(), x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: nilWant, err: true),
+    (desc: "ok: [right down] found", game: g1, x1: 1, y1: 3, x2: 3, y2: 5, cell: player1, want: RefCellPosition(x: 3, y: 5), err: false),
+    (desc: "ok: [right down] found when over distance", game: g1, x1: 1, y1: 3, x2: 4, y2: 6, cell: player1, want: RefCellPosition(x: 3, y: 5), err: false),
+    (desc: "ok: [right down] found when over distance (2)", game: g1, x1: 1, y1: 3, x2: 5, y2: 7, cell: player1, want: RefCellPosition(x: 3, y: 5), err: false),
+    (desc: "ng: [right down] not found when same position", game: newGame(), x1: 1, y1: 3, x2: 1, y2: 3, cell: player1, want: nilWant, err: true),
+    (desc: "ng: [right down] not found when distance is 1", game: newGame(), x1: 1, y1: 3, x2: 2, y2: 4, cell: player1, want: nilWant, err: true),
+    (desc: "ng: [right down] not found when distance is 1", game: newGame(), x1: 1, y1: 3, x2: 3, y2: 5, cell: player1, want: nilWant, err: true),
   ]
   for tt in tests:
     checkpoint tt.desc
