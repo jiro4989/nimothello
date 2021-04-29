@@ -141,14 +141,6 @@ func setLineOblique(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
 
 func setLine*(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 直線上のセルを反転する。
-  var
-    x1 = x1
-    x2 = x2
-    y1 = y1
-    y2 = y2
-
-  if x2 < x1: swap(x1, x2)
-  if y2 < y1: swap(y1, y2)
   if y1 == y2:
     self.setLineHorizontal x1, y1, x2, y2, cell
     return
