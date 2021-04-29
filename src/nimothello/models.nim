@@ -228,12 +228,17 @@ func getPuttableVerticalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cel
     # それ以外のときは相手のセルなのでスルー
 
 func getFarestPosition(self: Board, x, y, xp, yp: int): RefCellPosition =
+  ## xp, yp方向の最も遠い座標を返す。
   var
     x = x
     y = y
 
+  let
+    maxWidth = self[0].len
+    maxHeight = self.len
+
   while true:
-    if x <= 0 or self[0].len < x or y <= 0 or self.len < y:
+    if x <= 0 or maxWidth <= x or y <= 0 or maxHeight <= y:
       return RefCellPosition(x: x, y: y)
 
     x += xp
