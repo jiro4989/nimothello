@@ -292,12 +292,18 @@ func getPuttableCellPositions(self: Game): seq[CellPosition] =
 func putCell*(self: var Game, x, y: int) = 
   ## 現在のプレイヤーに対応するセルを指定の座標のセルにセットする。
   ## セットの結果反転される箇所があれば反転される。
+  # ボードのセルを全部網羅し、現在のプレイヤーのセルのときだけ処理をする
   let cell = self.currentPlayer.playerToCell
-  let poses = self.board.getPuttableCellPositions(x, y, cell)
-  debugEcho poses
-  for pos in poses:
-    self.board.setLine x, y, pos.x, pos.y, cell
-  self.board[x, y] = cell
+  for yy, row in self.board:
+    for xx, c in row:
+      if c != cell:
+        continue
+      # 現在のプレイヤーのセルから見て配置可能な位置を取得する
+      let poses = self.board.getPuttableCellPositions(xx, yy, cell)
+      for pos in poses:
+        if pos.x == x and pos.y == y:
+          self.board.setLine xx, yy, x, y, cell
+          break
   self.turnPlayer()
 
 func getBoard*(self: Game): Board =
