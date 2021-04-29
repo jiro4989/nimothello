@@ -183,23 +183,16 @@ func getPuttableObliqueLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell
 
 func getPuttableHotizontalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
   ## 水平方向にコマを配置する。
-  let rng =
-    block:
-      var n: seq[int]
-      if x1 < x2:
-        for x in x1+1..x2:
-          n.add x
-        n
-      else:
-        for x in countdown(x2-1, x1):
-          n.add x
-        n
-  
-  for x in rng:
-    let c = self[x, y2]
-    debugEcho x
-    debugEcho y2
-    debugEcho c
+  if x1 == x2 and y1 == y2: return
+  let xp = inclVal(x1, x2)
+  let diff = abs(x1 - x2)
+  var
+    x = x1
+    y = y1
+  for i in 1..diff+1:
+    x += xp
+
+    let c = self[x, y]
     # 自分のセルか壁が見つかったら早期リターン
     if c in [cell, wall]:
       return
@@ -208,7 +201,7 @@ func getPuttableHotizontalLinePosition(self: Board, x1, y1, x2, y2: int, cell: C
     if c == empty:
       if abs(x1 - x) == 1:
         return nil
-      return RefCellPosition(x: x, y: y2)
+      return RefCellPosition(x: x, y: y)
     # それ以外のときは相手のセルなのでスルー
 
 func getPuttableVerticalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
