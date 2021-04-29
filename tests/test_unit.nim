@@ -232,3 +232,22 @@ block:
   check g.currentPlayer == p1
   g.turnPlayer()
   check g.currentPlayer == p2
+
+block:
+  var nilWant: RefCellPosition
+  var g1 = newGame()
+  g1.board[2, 2] = player2
+  let tests = [
+    (desc: "ok: found", game: g1, x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: RefCellPosition(x: 3, y: 1), err: false),
+    (desc: "ng: not found when same position", game: newGame(), x1: 1, y1: 3, x2: 1, y2: 3, cell: player1, want: nilWant, err: true),
+    (desc: "ng: not found when distance is 1", game: newGame(), x1: 1, y1: 3, x2: 2, y2: 2, cell: player1, want: nilWant, err: true),
+    (desc: "ng: not found when no player2 cell", game: newGame(), x1: 1, y1: 3, x2: 3, y2: 1, cell: player1, want: nilWant, err: true),
+  ]
+  for tt in tests:
+    checkpoint tt.desc
+    var g = tt.game
+    let got = g.board.getPuttableObliqueLinePosition(tt.x1, tt.y1, tt.x2, tt.y2, tt.cell)
+    if tt.err:
+      check got.isNil
+      continue
+    check tt.want[] == got[]
