@@ -316,3 +316,25 @@ block:
       check got.isNil
       continue
     check tt.want[] == got[]
+
+block:
+  checkpoint "getFarestPosition"
+  var nilWant: RefCellPosition
+  let tests = [
+    (desc: "ok: [left up] found", x1: 3, y1: 3, xp: -1, yp: -1, want: RefCellPosition(x: 0, y: 0), err: false),
+    (desc: "ok: [up] found", x1: 3, y1: 3, xp: 0, yp: -1, want: RefCellPosition(x: 3, y: 0), err: false),
+    (desc: "ok: [right up] found", x1: 3, y1: 3, xp: 1, yp: -1, want: RefCellPosition(x: 6, y: 0), err: false),
+    (desc: "ok: [left] found", x1: 3, y1: 3, xp: -1, yp: 0, want: RefCellPosition(x: 0, y: 3), err: false),
+    (desc: "ok: [right] found", x1: 3, y1: 3, xp: 1, yp: 0, want: RefCellPosition(x: 10, y: 3), err: false),
+    (desc: "ok: [left down] found", x1: 3, y1: 3, xp: -1, yp: 1, want: RefCellPosition(x: 0, y: 6), err: false),
+    (desc: "ok: [down] found", x1: 3, y1: 3, xp: 0, yp: 1, want: RefCellPosition(x: 3, y: 10), err: false),
+    (desc: "ok: [right down] found", x1: 3, y1: 3, xp: 1, yp: 1, want: RefCellPosition(x: 10, y: 10), err: false),
+  ]
+  for tt in tests:
+    checkpoint tt.desc
+    let g = newGame()
+    let got = g.board.getFarestPosition(tt.x1, tt.y1, tt.xp, tt.yp)
+    if tt.err:
+      check got.isNil
+      continue
+    check tt.want[] == got[]
