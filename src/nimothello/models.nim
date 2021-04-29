@@ -101,25 +101,35 @@ func playerToCell(p: Player): Cell =
   of p1: player1
   of p2: player2
 
+func inclCnt(a, b: int): int =
+  result =
+    if a < b: 1
+    else: -1
+
 func setLineVertical(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 垂直方向にコマを配置する。
-  for y in y1..y2:
+  ## 高さが下から上方向でもOK.
+  let yp = inclCnt(y1, y2)
+  let diff = abs(y1 - y2)
+  var y = y1
+  for i in 1..diff+1:
     self[x1, y] = cell
+    y += yp
 
 func setLineHorizontal(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 水平方向にコマを配置する。
-  for x in x1..x2:
+  ## 右から左方向の配置でもOK.
+  let xp = inclCnt(x1, x2)
+  let diff = abs(x1 - x2)
+  var x = x1
+  for i in 1..diff+1:
     self[x, y1] = cell
+    x += xp
 
 func setLineOblique(self: var Board, x1, y1, x2, y2: int, cell: Cell) =
   ## 斜め方向にコマを配置する。
-  var xp =
-    if x1 < x2: 1
-    else: -1
-  var yp =
-    if y1 < y2: 1
-    else: -1
-
+  let xp = inclCnt(x1, x2)
+  let yp = inclCnt(y1, y2)
   let diff = abs(x1 - x2)
   var
     x = x1
