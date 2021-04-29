@@ -3,3 +3,5 @@ tests/test1
 nimcache
 tests/test_gameplay
 testresults/pattern.json
+tests/test_unit
+testresults/test_unit.nim
