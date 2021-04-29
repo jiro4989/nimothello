@@ -12,6 +12,7 @@ binDir        = "bin"
 # Dependencies
 
 requires "nim >= 1.4.4"
+requires "illwill >= 0.2.0"
 
 task tests, "Run test":
   exec "testament p 'tests/*.nim'"
