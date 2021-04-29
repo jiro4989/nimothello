@@ -111,3 +111,42 @@ block:
     var g = newGame()
     g.board.setLineHorizontal(tt.x1, tt.y1, tt.x2, tt.y2, tt.cell)
     check tt.want == g.board
+
+block:
+  # set Oblique line
+  let want1 = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, player1, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, player1, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, player1, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player2, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+  let want2 = 
+    [
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+      [wall, empty, empty, player1, empty, empty, empty, empty, empty, wall],
+      [wall, empty, player1, empty, empty, empty, empty, empty, empty, wall],
+      [wall, player1, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player1, player2, empty, empty, empty, wall],
+      [wall, empty, empty, empty, player2, player1, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, empty, empty, empty, empty, empty, empty, empty, empty, wall],
+      [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
+    ]
+
+  let tests = [
+    (desc: "right down", x1: 1, y1: 1, x2: 3, y2: 3, cell: player1, want: want1),
+    (desc: "left down", x1: 3, y1: 1, x2: 1, y2: 3, cell: player1, want: want2),
+  ]
+  for tt in tests:
+    checkpoint tt.desc
+    var g = newGame()
+    g.board.setLineOblique(tt.x1, tt.y1, tt.x2, tt.y2, tt.cell)
+    check tt.want == g.board
