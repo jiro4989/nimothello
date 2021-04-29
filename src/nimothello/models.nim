@@ -1,4 +1,4 @@
-import sequtils, math
+import sequtils
 
 type
   Game* = object
@@ -158,28 +158,28 @@ func turnPlayer(self: var Game) =
 
 func getPuttableObliqueLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
   ## 斜め方向にコマを配置する。
+  if x1 == x2 and y1 == y2: return
+  let xp = inclVal(x1, x2)
+  let yp = inclVal(y1, y2)
+  let diff = abs(x1 - x2)
   var
-    x1 = x1
-    x2 = x2
-    y1 = y1
-    y2 = y2
+    x = x1
+    y = y1
+  for i in 1..diff+1:
+    x += xp
+    y += yp
 
-  if x2 < x1: swap(x1, x2)
-  if y2 < y1: swap(y1, y2)
-  for x2 in x1..x2:
-    for y2 in y1..y2:
-      if x2 != y2:
-        continue
-      # 自分のセルか壁が見つかったら早期リターン
-      if self[x2, y2] in [cell, wall]:
-        return
-      # 空のセルが見つかったら返す。
-      # ただし元セルに隣接する場合はNG
-      if self[x2, y2] == empty:
-        if abs(x1 - x2) == 1:
-          return nil
-        return RefCellPosition(x: x2, y: y2)
-      # それ以外のときは相手のセルなのでスルー
+    let c = self[x, y]
+    # 自分のセルか壁が見つかったら早期リターン
+    if c in [cell, wall]:
+      return
+    # 空のセルが見つかったら返す。
+    # ただし元セルに隣接する場合はNG
+    if c == empty:
+      if abs(x1 - x) == 1:
+        return nil
+      return RefCellPosition(x: x, y: y)
+    # それ以外のときは相手のセルなのでスルー
 
 func getPuttableHotizontalLinePosition(self: Board, x1, y1, x2, y2: int, cell: Cell): RefCellPosition =
   ## 水平方向にコマを配置する。
@@ -318,3 +318,7 @@ func debugPrint*(self: Board) =
       line.add s
       line.add " "
     debugEcho line
+
+func `$`*(self: RefCellPosition): string =
+  if not self.isNil:
+    return $self[]
