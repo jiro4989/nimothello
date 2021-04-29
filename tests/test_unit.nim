@@ -66,6 +66,7 @@ block:
   let tests = [
     (desc: "set cells to edge area", x1: 1, y1: 1, x2: 1, y2: 3, cell: player1, want: want1),
     (desc: "overwrite cells", x1: 5, y1: 3, x2: 5, y2: 5, cell: player1, want: want2),
+    (desc: "set cells to edge area (desc)", x1: 1, y1: 3, x2: 1, y2: 1, cell: player1, want: want1),
   ]
   for tt in tests:
     checkpoint tt.desc
@@ -105,6 +106,7 @@ block:
   let tests = [
     (desc: "set horizontal line to edge", x1: 1, y1: 1, x2: 3, y2: 1, cell: player1, want: want1),
     (desc: "overwrite cells", x1: 4, y1: 4, x2: 6, y2: 4, cell: player1, want: want2),
+    (desc: "set horizontal line to edge (desc)", x1: 3, y1: 1, x2: 1, y2: 1, cell: player1, want: want1),
   ]
   for tt in tests:
     checkpoint tt.desc
