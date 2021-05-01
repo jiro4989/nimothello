@@ -329,6 +329,11 @@ func debugPrint*(self: Board) =
       line.add " "
     debugEcho line
 
+func getCurrentPlayerName*(self: Game): string =
+  case self.currentPlayer
+  of p1: "PLAYER1"
+  of p2: "PLAYER2"
+
 func `$`*(self: RefCellPosition): string =
   if not self.isNil:
     return $self[]
