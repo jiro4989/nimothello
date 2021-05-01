@@ -1,12 +1,11 @@
 from terminal import eraseScreen
-import os, strutils, strformat, times
+import os, strutils, strformat
 import illwill
 import models
 
 type
   GameView = ref object
     buf: TerminalBuffer
-    startTime: DateTime
     boardView: BoardView
     scoreView: ScoreView
     currentPlayerView: CurrentPlayerView
@@ -16,7 +15,6 @@ type
   BoardView = object
     ## オセロ盤を表示するビュー。
     x, y: int
-    board: Board
   
   ScoreView = object
     ## プレイヤーの得点を表示するビュー。
@@ -50,8 +48,8 @@ proc init =
 
 init()
 
-proc newBoardView(board: Board): BoardView =
-  BoardView(x: 0, y: 0, board: board)
+proc newBoardView(): BoardView =
+  BoardView(x: 0, y: 0)
   
 proc newScoreView(): ScoreView =
   ScoreView(x: 22, y: 0)
@@ -71,18 +69,16 @@ proc newTerminal: TerminalBuffer =
     h = terminalHeight()
   result = newTerminalBuffer(w, h)
 
-proc newGameView*(board: Board): GameView =
+proc newGameView*(): GameView =
   var buf = newTerminal()
   result = GameView(
     buf: buf,
-    startTime: now(),
-    boardView: newBoardView(board),
+    boardView: newBoardView(),
     scoreView: newScoreView(),
     currentPlayerView: newCurrentPlayerView(),
     timeView: newTimeView(),
     helpView: newHelpView(),
   )
-
 
 proc color(c: Cell): BackgroundColor =
   case c
@@ -98,9 +94,9 @@ proc text(c: Cell): string =
   of player1: "00"
   of player2: "--"
 
-proc draw*(self: BoardView, buf: var TerminalBuffer) =
+proc draw*(self: BoardView, buf: var TerminalBuffer, game: Game) =
   buf = newTerminal()
-  for yy, row in self.board:
+  for yy, row in game.getBoard:
     for xx, cell in row:
       let
         x = xx + self.x
@@ -142,11 +138,11 @@ proc draw*(self: CurrentPlayerView, buf: var TerminalBuffer, game: Game) =
   buf.drawBody(x, y+1, name, rightViewWidth)
   buf.resetAttributes()
   
-proc draw*(self: TimeView, buf: var TerminalBuffer, startTime: DateTime) =
+proc draw*(self: TimeView, buf: var TerminalBuffer, game: Game) =
   let
     x = self.x
     y = self.y
-    elapsedTime = (now() - startTime).toParts[Seconds]
+    elapsedTime = game.getElapsedTime()
   buf.drawHeader(x, y, "TIME", rightViewWidth)
   buf.drawBody(x, y+1, &"{elapsedTime} sec", rightViewWidth)
   buf.resetAttributes()
@@ -162,16 +158,15 @@ proc draw*(self: HelpView, buf: var TerminalBuffer) =
   buf.resetAttributes()
   
 proc draw*(self: GameView, game: Game) =
-  self.boardView.draw(self.buf)
+  self.boardView.draw(self.buf, game)
   self.scoreView.draw(self.buf, game)
   self.currentPlayerView.draw(self.buf, game)
-  self.timeView.draw(self.buf, self.startTime)
+  self.timeView.draw(self.buf, game)
   self.helpView.draw(self.buf)
   self.buf.display()
 
 when isMainModule:
-  let board = newBoard()
-  var gv = newGameView(board)
+  var gv = newGameView()
   var game = newGame()
   sleep 1000
   gv.draw(game)

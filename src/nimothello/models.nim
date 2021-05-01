@@ -1,9 +1,10 @@
-import sequtils
+import sequtils, times
 
 type
   Game* = object
     board: Board
     currentPlayer: Player
+    startTime: DateTime
   Board* = array[10, array[10, Cell]]
     ## ゲーム板を表す型。
     ## 
@@ -51,9 +52,13 @@ func newBoard*(): Board =
       [wall, wall, wall, wall, wall, wall, wall, wall, wall, wall],
     ]
 
-func newGame*(): Game =
+proc newGame*(): Game =
   ## ゲームインスタンスを生成する。
-  result = Game(board: newBoard(), currentPlayer: p1)
+  result = Game(
+    board: newBoard(),
+    currentPlayer: p1,
+    startTime: now(),
+    )
 
 func getStatus*(self: Game): GameStatus =
   var emptyCount: int
@@ -333,6 +338,13 @@ func getCurrentPlayerName*(self: Game): string =
   case self.currentPlayer
   of p1: "PLAYER1"
   of p2: "PLAYER2"
+
+proc getElapsedTime*(self: Game): int64 =
+  ## 経過時間を返す。
+  let
+    duration = now() - self.startTime
+    parts = duration.toParts
+  result = parts[Seconds]
 
 func `$`*(self: RefCellPosition): string =
   if not self.isNil:
