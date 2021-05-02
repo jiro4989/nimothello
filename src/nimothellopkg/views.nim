@@ -39,8 +39,22 @@ proc printResult*(self: Game) =
   let
     p1 = self.getPlayer1Score
     p2 = self.getPlayer2Score
-  echo "SCORE:"
-  echo &"PLAYER1 = {p1}, PLAYER2 = {p2}"
+    winner =
+      if p1 < p2: "PLAYER2"
+      elif p2 < p1: "PLAYER1"
+      else: "NONE"
+    elapsedTime = self.getElapsedTime()
+  echo &"""
+ELAPSED TIME:
+  {elapsedTime} sec
+
+SCORE:
+  PLAYER1 = {p1}
+  PLAYER2 = {p2}
+
+WINNER:
+  {winner}
+"""
 
 proc exitProc*() {.noconv.} =
   ## 終了処理
