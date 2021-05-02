@@ -8,7 +8,11 @@ A teminal othello (reversi) in Nim.
 
 Linux demo:
 
+|demo-linux|
+
 Windows demo:
+
+|demo-windows|
 
 .. contents:: Table of contents
 
@@ -67,3 +71,6 @@ Details, see `release.yml <./.github/workflows/release.yml>`_.
    :target: https://nimble.directory/ci/badges/nimothello/nimdevel/output.html
 
 .. |image-release-workflow| image:: https://user-images.githubusercontent.com/13825004/87944618-9897fc00-cada-11ea-9401-74167f04b5c4.png
+
+.. |demo-linux| image:: ./docs/othello_linux.gif
+.. |demo-windows| image:: ./docs/othello_win.gif
