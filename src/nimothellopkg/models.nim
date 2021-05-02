@@ -362,7 +362,7 @@ proc getElapsedTime*(self: Game): int64 =
   let
     duration = now() - self.startTime
     parts = duration.toParts
-  result = parts[Seconds]
+  result = parts[Hours] * 3600 + parts[Minutes] * 60 + parts[Seconds]
 
 proc getCursol*(self: Game): CellPosition =
   self.cursol
