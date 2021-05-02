@@ -12,10 +12,10 @@ proc main() =
     of Key.None: discard
     of Key.Escape:
       break
-    of Key.H: game.moveLeft()
-    of Key.J: game.moveDown()
-    of Key.K: game.moveUp()
-    of Key.L: game.moveRight()
+    of Key.H, Key.A: game.moveLeft()
+    of Key.J, Key.S: game.moveDown()
+    of Key.K, Key.W: game.moveUp()
+    of Key.L, Key.D: game.moveRight()
     of Key.Space, Key.Enter: game.putCell()
     else: discard
 
