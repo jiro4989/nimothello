@@ -326,6 +326,10 @@ func putCell*(self: var Game, x, y: int) =
     self.board.setLine pos.x1, pos.y1, pos.x2, pos.y2, cell
   self.turnPlayer()
 
+  # 配置可能なセルが存在しない時はプレイヤーを交代する
+  if self.getPuttableCellPositions().len < 1:
+    self.turnPlayer()
+
 func putCell*(self: var Game) = 
   ## 現在のプレイヤーに対応するセルを指定の座標のセルにセットする。
   ## セットの結果反転される箇所があれば反転される。
