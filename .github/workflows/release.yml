@@ -8,9 +8,9 @@ on:
 env:
   APP_NAME: 'nimothello'
   NIM_VERSION: 'stable'
-  MAINTAINER: 'MAINTAINER'
+  MAINTAINER: 'jiro'
   RELEASE_FILES: bin LICENSE README.*
-  DESC: 'TODO'
+  DESC: 'A teminal othello (reversi) in Nim.'
 
 jobs:
   build-artifact:
@@ -22,7 +22,7 @@ jobs:
           - windows-latest
           - macOS-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ env.NIM_VERSION }}
@@ -53,7 +53,7 @@ jobs:
   build-linux-packages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ env.NIM_VERSION }}
@@ -103,7 +103,7 @@ jobs:
       - build-artifact
       - build-linux-packages
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Generate changelog
         run: |
           wget https://github.com/git-chglog/git-chglog/releases/download/0.9.1/git-chglog_linux_amd64
