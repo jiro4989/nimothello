@@ -72,5 +72,5 @@ Details, see `release.yml <./.github/workflows/release.yml>`_.
 
 .. |image-release-workflow| image:: https://user-images.githubusercontent.com/13825004/87944618-9897fc00-cada-11ea-9401-74167f04b5c4.png
 
-.. |demo-linux| image:: ./docs/othello_linux.gif
-.. |demo-windows| image:: ./docs/othello_win.gif
+.. |demo-linux| image:: https://raw.githubusercontent.com/jiro4989/nimothello/master/docs/othello_linux.gif.gif
+.. |demo-windows| image:: https://raw.githubusercontent.com/jiro4989/nimothello/master/docs/othello_win.gif.gif
