@@ -23,6 +23,21 @@ Usage
 
    $ nimothello
 
+Key bindings
+^^^^^^^^^^^^
+
+Vim like key-bindings.
+
+=============== =======
+Key             Motion
+=============== =======
+H / A           Move left
+J / S           Move down
+K / W           Move up
+L / D           Move right
+<Space>/<Enter> Put cell
+=============== =======
+
 Installation
 ============
 
