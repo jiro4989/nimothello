@@ -33,7 +33,7 @@ type
     x, y: int
 
 const
-  rightViewWidth = 19
+  rightViewWidth = 26
 
 proc printResult*(self: Game) =
   let
@@ -170,9 +170,9 @@ proc draw*(self: HelpView, buf: var TerminalBuffer) =
   let
     x = self.x
     y = self.y
-    width = 41
+    width = 48
   buf.drawHeader(x, y, "KEYS", width)
-  buf.drawBody(x, y+1, "LEFT = H | DOWN = J | UP = K | RIGHT = L", width)
+  buf.drawBody(x, y+1, "LEFT = H,A | DOWN = J,S | UP = K,W | RIGHT = L,F", width)
   buf.drawBody(x, y+2, "ENTER = PUT CELL    | QUIT = ESC", width)
   buf.resetAttributes()
   
