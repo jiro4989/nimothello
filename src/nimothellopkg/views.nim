@@ -35,7 +35,14 @@ type
 const
   rightViewWidth = 19
 
-proc exitProc() {.noconv.} =
+proc printResult*(self: Game) =
+  let
+    p1 = self.getPlayer1Score
+    p2 = self.getPlayer2Score
+  echo "SCORE:"
+  echo &"PLAYER1 = {p1}, PLAYER2 = {p2}"
+
+proc exitProc*() {.noconv.} =
   ## 終了処理
   illwillDeinit()
   showCursor()
@@ -96,14 +103,26 @@ proc text(c: Cell): string =
 
 proc draw*(self: BoardView, buf: var TerminalBuffer, game: Game) =
   buf = newTerminal()
+  let poses = game.getPuttableCellPositions()
   for yy, row in game.getBoard:
     for xx, cell in row:
       let
         x = xx + self.x
         y = yy + self.y
-      buf.setForegroundColor(fgWhite)
-      buf.setBackgroundColor(cell.color)
-      buf.write(x*2, y, cell.text)
+        pos = newCellPosition(x, y)
+        cursol = game.getCursol
+      if pos == cursol:
+        buf.setForegroundColor(fgBlack)
+        buf.setBackgroundColor(bgGreen)
+      else:
+        buf.setForegroundColor(fgWhite)
+        buf.setBackgroundColor(cell.color)
+
+      if pos in poses:
+        buf.write(x*2, y, "**")
+      else:
+        buf.write(x*2, y, cell.text)
+
       buf.resetAttributes()
 
 template draw(buf: var TerminalBuffer, x, y: int, text: string, alignCount: int, fg: ForegroundColor, bg: BackgroundColor, blight: bool) =
@@ -154,7 +173,7 @@ proc draw*(self: HelpView, buf: var TerminalBuffer) =
     width = 41
   buf.drawHeader(x, y, "KEYS", width)
   buf.drawBody(x, y+1, "LEFT = H | DOWN = J | UP = K | RIGHT = L", width)
-  buf.drawBody(x, y+2, "ENTER = PUT CELL | QUIE = Q or ESC", width)
+  buf.drawBody(x, y+2, "ENTER = PUT CELL    | QUIT = ESC", width)
   buf.resetAttributes()
   
 proc draw*(self: GameView, game: Game) =

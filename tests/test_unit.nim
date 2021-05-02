@@ -4,7 +4,7 @@ discard """
 
 import unittest
 
-include nimothello/models
+include nimothellopkg/models
 
 block:
   checkpoint "Game status"

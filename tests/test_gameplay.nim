@@ -4,7 +4,7 @@ discard """
 
 import unittest
 
-import nimothello/models
+import nimothellopkg/models
 
 var game = newGame()
 let tests = [

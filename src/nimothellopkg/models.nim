@@ -4,6 +4,7 @@ type
   Game* = object
     board: Board
     currentPlayer: Player
+    cursol: CellPosition
     startTime: DateTime
   Board* = array[10, array[10, Cell]]
     ## ゲーム板を表す型。
@@ -57,8 +58,12 @@ proc newGame*(): Game =
   result = Game(
     board: newBoard(),
     currentPlayer: p1,
+    cursol: CellPosition(x: 5, y: 5),
     startTime: now(),
     )
+
+func newCellPosition*(x, y: int): CellPosition =
+  CellPosition(x: x, y: y)
 
 func getStatus*(self: Game): GameStatus =
   var emptyCount: int
@@ -280,7 +285,7 @@ func getPuttableCellPositions(self: Board, x, y: int, cell: Cell): seq[CellPosit
   # 8. 右下
   checkAdd(self.getFarestPosition(x, y, 1, 1), getPuttableObliqueLinePosition)
 
-func getPuttableCellPositions(self: Game): seq[CellPosition] =
+func getPuttableCellPositions*(self: Game): seq[CellPosition] =
   let
     playerCell = self.currentPlayer.playerToCell
     board = self.board
@@ -312,10 +317,19 @@ func putCell*(self: var Game, x, y: int) =
         if pos.x == x and pos.y == y:
           puttablePoses.add Pos(x1: xx, y1: yy, x2: x, y2: y)
           break
+
+  # 配置可能なセルが存在しないということは、誤った位置に置こうとしたので無視
+  if puttablePoses.len < 1: return
+
   puttablePoses = deduplicate(puttablePoses)
   for pos in puttablePoses:
     self.board.setLine pos.x1, pos.y1, pos.x2, pos.y2, cell
   self.turnPlayer()
+
+func putCell*(self: var Game) = 
+  ## 現在のプレイヤーに対応するセルを指定の座標のセルにセットする。
+  ## セットの結果反転される箇所があれば反転される。
+  self.putCell(self.cursol.x, self.cursol.y)
 
 func getBoard*(self: Game): Board =
   self.board
@@ -336,8 +350,8 @@ func debugPrint*(self: Board) =
 
 func getCurrentPlayerName*(self: Game): string =
   case self.currentPlayer
-  of p1: "PLAYER1"
-  of p2: "PLAYER2"
+  of p1: "PLAYER1 (00)"
+  of p2: "PLAYER2 (--)"
 
 proc getElapsedTime*(self: Game): int64 =
   ## 経過時間を返す。
@@ -345,6 +359,25 @@ proc getElapsedTime*(self: Game): int64 =
     duration = now() - self.startTime
     parts = duration.toParts
   result = parts[Seconds]
+
+proc getCursol*(self: Game): CellPosition =
+  self.cursol
+
+proc moveLeft*(self: var Game) =
+  if 1 < self.cursol.x:
+    dec self.cursol.x
+
+proc moveRight*(self: var Game) =
+  if self.cursol.x < self.board[0].len-2:
+    inc self.cursol.x
+
+proc moveUp*(self: var Game) =
+  if 1 < self.cursol.y:
+    dec self.cursol.y
+
+proc moveDown*(self: var Game) =
+  if self.cursol.y < self.board.len-2:
+    inc self.cursol.y
 
 func `$`*(self: RefCellPosition): string =
   if not self.isNil:
