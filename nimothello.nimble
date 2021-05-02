@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "jiro4989"
-description   = "TODO"
+description   = "A teminal othello (reversi) in Nim."
 license       = "MIT"
 srcDir        = "src"
 bin           = @["nimothello"]
